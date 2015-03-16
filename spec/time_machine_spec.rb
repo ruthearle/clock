@@ -14,7 +14,7 @@ describe TimeMachine::API do
     describe "GET /api/time" do
 
       before do
-        @current_time = Time.now
+        @current_time = Time.now + 3600
         Timecop.freeze(@current_time)
       end
 
@@ -50,7 +50,7 @@ describe TimeMachine::API do
       it "allows a user to alter the time" do
         put "api/time", new_time, request_headers
         expect(last_response.status).to eq 200
-        expect(ApiTime.get).to match new_time
+        expect(ApiTime.get).to eq @new_time
       end
     end
   end

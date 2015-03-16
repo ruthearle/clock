@@ -14,7 +14,7 @@ describe ApiTime do
     end
 
     it "returns the current time" do
-      expect(ApiTime.get).to match ({ :time => @the_time })
+      expect(ApiTime.get).to match @the_time
     end
   end
 
@@ -31,7 +31,7 @@ describe ApiTime do
 
     it "allows the current time to be changed" do
       ApiTime.update(@the_time)
-      expect(ApiTime.get).to match ({ :time => @the_time })
+      expect(ApiTime.get).to match @the_time
     end
   end
 end

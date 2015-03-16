@@ -11,7 +11,14 @@ module TimeMachine
 
         desc "Returns the current time."
         get :time do
-          ApiTime.get
+          { :time => ApiTime.get }
+        end
+
+        params do
+          requires :the_time, type: String, desc: "Updated time"
+        end
+        put ':the_time' do
+          ApiTime.update(params[:the_time])
         end
 
       end
