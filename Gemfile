@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gem 'grape'
 gem 'rack'
 
-group :development do
+group :test do
   gem 'rspec'
   gem 'rack-test'
   gem 'timecop'
