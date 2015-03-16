@@ -17,4 +17,21 @@ describe ApiTime do
       expect(ApiTime.get).to match ({ :time => @the_time })
     end
   end
+
+  describe "#update" do
+
+    before do
+      @the_time = Time.now + 3600
+      Timecop.freeze(@the_time)
+    end
+
+    after do
+      Timecop.return
+    end
+
+    it "allows the current time to be changed" do
+      ApiTime.update(@the_time)
+      expect(@the_time).to match ({ :time => @the_time })
+    end
+  end
 end
