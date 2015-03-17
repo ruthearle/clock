@@ -1,7 +1,7 @@
 class ApiTime
 
   def self.get
-    @the_time ||= Time.now
+    @the_time || Time.now
   end
 
   def self.update(time)

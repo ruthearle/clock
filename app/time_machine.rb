@@ -16,7 +16,7 @@ module TimeMachine
         params do
           requires :new, type: Time, desc: "Updated time"
         end
-        put ':the_time' do
+        put ':time' do
           ApiTime.update(params[:new])
         end
 

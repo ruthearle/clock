@@ -13,8 +13,8 @@ describe TimeMachine::API do
     describe "GET /api/time" do
 
       before do
-        @current_time = Time.now + 3600
-        Timecop.freeze(@current_time)
+        @the_time = Time.now + 3600
+        Timecop.freeze(@the_time)
       end
 
       after do
@@ -24,6 +24,16 @@ describe TimeMachine::API do
       it 'returns the time in JSON format' do
         get "api/time"
         expect(last_response.status).to eq 200
+        expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{@the_time}" })
+      end
+
+      it 'returns the current time for each request' do
+        @current_time = Time.now
+
+        get "api/time"
+        expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{@the_time}" })
+        sleep 2
+        get "api/time"
         expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{@current_time}" })
       end
     end
@@ -39,17 +49,17 @@ describe TimeMachine::API do
         Timecop.return
       end
 
-      new_time = { "new" => @new_time }
-
-      request_headers = {
-       "Accept" => "application/json",
-       "Content-Type" => "application/json"
-      }
-
       it "allows a user to alter the time" do
-        put "api/time", new_time, request_headers
+        @current_time = Time.now
+        get "api/time"
+        expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{@current_time}" })
+
+        put "api/time", { "new" => @new_time }
         expect(last_response.status).to eq 200
-        expect(ApiTime.get).to eq @new_time
+        expect(last_response.body).to eq @new_time.to_json
+
+        get "api/time"
+        expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{@new_time}" })
       end
     end
   end
