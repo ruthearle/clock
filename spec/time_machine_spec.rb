@@ -1,6 +1,5 @@
+require 'spec_helper'
 require 'time_machine'
-require 'rack/test'
-require 'timecop'
 
 describe TimeMachine::API do
   include Rack::Test::Methods
@@ -40,7 +39,7 @@ describe TimeMachine::API do
         Timecop.return
       end
 
-      new_time = { "time" => @new_time }
+      new_time = { "new" => @new_time }
 
       request_headers = {
        "Accept" => "application/json",

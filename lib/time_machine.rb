@@ -15,10 +15,10 @@ module TimeMachine
         end
 
         params do
-          requires :the_time, type: String, desc: "Updated time"
+          requires :new, type: Time, desc: "Updated time"
         end
         put ':the_time' do
-          ApiTime.update(params[:the_time])
+          ApiTime.update(params[:new])
         end
 
       end

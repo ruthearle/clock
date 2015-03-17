@@ -1,2 +1,3 @@
-- color
-- format document
+--color
+--format doc
+--require spec_helper

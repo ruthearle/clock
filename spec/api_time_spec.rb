@@ -1,5 +1,5 @@
+require 'spec_helper'
 require 'api_time'
-require 'timecop'
 
 describe ApiTime do
   describe "#get" do
