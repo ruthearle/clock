@@ -1,4 +1,4 @@
-require './lib/time_machine'
+require './app/time_machine'
 require 'grape'
 require 'rack'
 

@@ -1,12 +1,13 @@
 require 'spec_helper'
-require 'api_time'
+require './app/lib/api_time'
 
 describe ApiTime do
+
   describe "#get" do
 
     before do
-      @the_time = Time.now
-      Timecop.freeze(@the_time)
+      @current_time = Time.now + 3600
+      Timecop.freeze(@current_time)
     end
 
     after do
@@ -14,15 +15,15 @@ describe ApiTime do
     end
 
     it "returns the current time" do
-      expect(ApiTime.get).to match @the_time
+      expect(ApiTime.get).to match @current_time
     end
   end
 
   describe "#update" do
 
     before do
-      @the_time = Time.now + 3600
-      Timecop.freeze(@the_time)
+      @updated_time = Time.now + 3600
+      Timecop.freeze(@updated_time)
     end
 
     after do
@@ -30,8 +31,8 @@ describe ApiTime do
     end
 
     it "allows the current time to be changed" do
-      ApiTime.update(@the_time)
-      expect(ApiTime.get).to match @the_time
+      ApiTime.update(@updated_time)
+      expect(ApiTime.get).to match @updated_time
     end
   end
 end

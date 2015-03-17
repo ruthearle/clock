@@ -1,6 +1,5 @@
 require 'grape'
-require_relative './api_time'
-
+require_relative './lib/api_time'
 module TimeMachine
 
     class API < Grape::API

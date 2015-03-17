@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'time_machine'
+require './app/time_machine'
 
 describe TimeMachine::API do
   include Rack::Test::Methods
