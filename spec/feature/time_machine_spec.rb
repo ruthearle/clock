@@ -29,7 +29,6 @@ describe TimeMachine::API do
 
       it 'returns the current time for each request' do
         @current_time = Time.now
-
         get "api/time"
         expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{@the_time}" })
         sleep 2
@@ -56,7 +55,7 @@ describe TimeMachine::API do
 
         put "api/time", { "new" => @new_time }
         expect(last_response.status).to eq 200
-        expect(last_response.body).to eq @new_time.to_json
+        expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{@new_time}" })
 
         get "api/time"
         expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{@new_time}" })

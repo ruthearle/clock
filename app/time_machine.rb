@@ -17,7 +17,7 @@ module TimeMachine
           requires :new, type: Time, desc: "Updated time"
         end
         put ':time' do
-          ApiTime.update(params[:new])
+          { :time => ApiTime.update(params[:new]) }
         end
 
       end
