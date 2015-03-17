@@ -1,3 +1,4 @@
 --color
+--order default
 --format doc
 --require spec_helper
