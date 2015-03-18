@@ -10,55 +10,45 @@ describe TimeMachine::API do
 
   describe TimeMachine::API do
 
+    let (:current_time) { Time.now }
+    let (:new_time)     { Time.now + 3600 }
+
     describe "GET /api/time" do
 
-      before do
-        @the_time = Time.now + 3600
-        Timecop.freeze(@the_time)
-      end
-
-      after do
-        Timecop.return
-      end
-
       it 'returns the time in JSON format' do
+        allow(Time).to receive(:now).and_return(new_time)
         get "api/time"
         expect(last_response.status).to eq 200
-        expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{@the_time}" })
+        expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{Time.now}" })
       end
 
       it 'returns the current time for each request' do
-        @current_time = Time.now
+        allow(Time).to receive(:now).and_return(new_time)
+
         get "api/time"
-        expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{@the_time}" })
+        expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{Time.now}" })
+
         sleep 2
+
+        allow(Time).to receive(:now).and_return(current_time)
+
         get "api/time"
-        expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{@current_time}" })
+        expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{Time.now}" })
       end
     end
 
     describe "PUT /api/time" do
 
-      before do
-        @new_time = Time.now + 3600
-        Timecop.freeze(@new_time)
-      end
-
-      after do
-        Timecop.return
-      end
-
       it "allows a user to alter the time" do
-        @current_time = Time.now
         get "api/time"
-        expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{@current_time}" })
+        expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{current_time}" })
 
-        put "api/time", { "new" => @new_time }
+        put "api/time", { "new" => new_time }
         expect(last_response.status).to eq 200
-        expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{@new_time}" })
+        expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{new_time}" })
 
         get "api/time"
-        expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{@new_time}" })
+        expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{new_time}" })
       end
     end
   end

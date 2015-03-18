@@ -1,5 +1,7 @@
 require 'grape'
+require 'grape-swagger'
 require_relative './lib/api_time'
+
 module TimeMachine
 
     class API < Grape::API
@@ -22,6 +24,6 @@ module TimeMachine
 
       end
 
+    add_swagger_documentation
     end
-
 end

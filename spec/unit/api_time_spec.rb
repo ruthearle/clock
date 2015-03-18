@@ -22,18 +22,11 @@ describe ApiTime do
   end
 
   describe "#update" do
-    before do
-      @updated_time = Time.now + 3600
-      Timecop.freeze(@updated_time)
-    end
-
-    after do
-      Timecop.return
-    end
 
     it "allows the current time to be changed" do
-      ApiTime.update(@updated_time)
-      expect(ApiTime.get).to match @updated_time
+      updated_time = Time.now + 3600
+      ApiTime.update(updated_time)
+      expect(ApiTime.get).to match updated_time
     end
   end
 end
