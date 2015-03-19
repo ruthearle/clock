@@ -1,12 +1,9 @@
 source 'https://rubygems.org'
 
-ruby '2.1.1'
-
-gem 'grape'
 gem 'rack'
-gem 'rack-cors'
+gem 'grape'
 gem 'grape-swagger'
-
+gem 'mongoid'
 
 group :test do
   gem 'rspec'

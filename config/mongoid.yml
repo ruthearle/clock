@@ -1,0 +1,13 @@
+development:
+  sessions:
+    default:
+      database: timemachine_development
+      hosts:
+        - localhost:27017
+
+test:
+  sessions:
+    default:
+      database: timemachine_test
+      hosts:
+        - localhost:27017

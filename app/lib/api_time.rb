@@ -1,13 +1,14 @@
 class ApiTime
 
-  @@the_time = nil
+  attr_accessor :the_time
 
-  def self.get
-    @@the_time || Time.now
+  def get
+      @the_time || Time.now
+
   end
 
-  def self.update(time)
-    @@the_time = time
+  def update(time)
+    @the_time = time
   end
 
 end

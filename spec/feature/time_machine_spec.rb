@@ -19,7 +19,7 @@ describe TimeMachine::API do
         allow(Time).to receive(:now).and_return(new_time)
         get "api/time"
         expect(last_response.status).to eq 200
-        expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{Time.now}" })
+        expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{Time.now.utc.iso8601}" })
       end
 
       it 'returns the current time for each request' do
@@ -28,7 +28,7 @@ describe TimeMachine::API do
         get "api/time"
         expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{Time.now}" })
 
-        sleep 2
+        #sleep 2
 
         allow(Time).to receive(:now).and_return(current_time)
 

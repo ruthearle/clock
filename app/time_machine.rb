@@ -1,29 +1,35 @@
 require 'grape'
 require 'grape-swagger'
 require_relative './lib/api_time'
+require_relative './models/clock'
 
 module TimeMachine
 
     class API < Grape::API
 
       format :json
-
       resource :api do
 
         desc "Returns the current time."
         get :time do
-          { :time => ApiTime.get }
+            #clock = ApiTime.new.get
+            #{ :time => clock.iso8601 }
+          clock = Clock.create
+          { :time => clock.time.utc.iso8601 }
         end
 
         params do
           requires :new, type: Time, desc: "Updated time"
         end
+
+        desc "Permits the time to be altered"
         put ':time' do
           { :time => ApiTime.update(params[:new]) }
         end
 
+      add_swagger_documentation
+
       end
 
-    add_swagger_documentation
     end
 end
