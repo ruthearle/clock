@@ -5,8 +5,14 @@ describe Clock do
 
   describe "#clock_check" do
     it "queries the database for any existing clock objects" do
-        db = Clock.new
-        expect(db.clock_check).to eq false
+        expect(Clock.new.clock_check).to eq false
+    end
+
+    it "finds the clock object if it exists" do
+        object = Clock.new
+        object.time = Time.now
+        object.save
+        expect(Clock.new.clock_check).to eq object
     end
   end
 end

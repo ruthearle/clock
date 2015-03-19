@@ -7,6 +7,10 @@ class Clock
     field :time, type: Time, default: lambda{ Time.now }
 
     def clock_check
-      false
+        if Clock.exists?
+            clock = Clock.last
+        else
+            false
+        end
     end
 end
