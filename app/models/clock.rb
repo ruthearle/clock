@@ -4,6 +4,6 @@ class Clock
 
     include Mongoid::Document
 
-    field :time, type: Time, default: lambda{Time.now}
+    field :time, type: Time, default: lambda{ Time.now }
 
 end

@@ -12,10 +12,11 @@ module TimeMachine
 
         desc "Returns the current time."
         get :time do
-            #clock = ApiTime.new.get
-            #{ :time => clock.iso8601 }
-          clock = Clock.create
-          { :time => clock.time.utc.iso8601 }
+
+          clock = Clock.create!
+          cookies[:id] = clock.id
+          { :time => clock.time.iso8601 }
+          p clock.id
         end
 
         params do
@@ -24,7 +25,7 @@ module TimeMachine
 
         desc "Permits the time to be altered"
         put ':time' do
-          { :time => ApiTime.update(params[:new]) }
+            { :time => ApiTime.new.update(params[:new]) }
         end
 
       add_swagger_documentation
