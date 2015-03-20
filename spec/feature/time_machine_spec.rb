@@ -15,14 +15,14 @@ describe TimeMachine::API do
 
     describe "GET /api/time" do
 
-      it 'returns the time in JSON format' do
+      it "returns the time in JSON format" do
         allow(Time).to receive(:now).and_return(new_time)
         get "api/time"
         expect(last_response.status).to eq 200
         expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{Time.now.iso8601}" })
       end
 
-      it 'returns the current time for each request' do
+      it "returns the current time for each request without a set-cookie" do
         allow(Time).to receive(:now).and_return(new_time)
 
         get "api/time"
@@ -32,6 +32,22 @@ describe TimeMachine::API do
 
         get "api/time"
         expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{Time.now.iso8601}" })
+      end
+
+      it "returns the saved time with each request if set-cookie present" do
+        allow(Time).to receive(:now).and_return(current_time)
+
+        get "api/time"
+        expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{Time.now.iso8601}" })
+        expect(last_response.header).not_to include "set-cookie"
+
+        put "api/time", { "new" => new_time }
+        expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{new_time.iso8601}" })
+        expect(last_response.header).to include "set-cookie"
+
+        get "api/time"
+        expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{new_time.iso8601}" })
+        expect(last_response.header).to include "set-cookie"
       end
 
     end
@@ -48,6 +64,12 @@ describe TimeMachine::API do
 
         get "api/time"
         expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{new_time.iso8601}" })
+      end
+
+      it "saves a cookie in order for each service to use their clock" do
+        put "api/time", { "new" => new_time }
+        expect(last_response.status).to eq 200
+        expect(last_response.header).to include "set-cookie"
       end
     end
   end

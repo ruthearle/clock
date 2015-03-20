@@ -11,6 +11,7 @@ module TimeMachine
 
         desc "Returns the current time."
         get :time do
+            #if cookies?
             clock = Clock.check
             { :time => clock.time.iso8601 }
         end
@@ -24,6 +25,7 @@ module TimeMachine
             clock = Clock.new
             clock.time = (params[:new])
             clock.save!
+            cookies[:id] = clock.id
             { :time => clock.time.iso8601  }
         end
 
