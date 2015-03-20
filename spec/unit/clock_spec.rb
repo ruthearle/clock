@@ -5,17 +5,25 @@ describe Clock do
 
   describe "#check" do
 
-    it "finds the last created clock, if it exists" do
+    xit "finds the last created clock, if it exists" do
         object = Clock.new
         object.time = Time.now
-        object.save
+        #object.save
         id = object.id
         expect(Clock.check(id)).to eq object
     end
 
+    it "finds a clock by their id" do
+      object = Clock.new
+      object.save
+      object_2 = Clock.new
+      object_2.save
+      id = object.id
+      expect(Clock.check(id)).to eq object
+    end
+
     it "creates a new clock if none exists" do
         expect(Clock.check).to be_truthy
-
     end
 
   end

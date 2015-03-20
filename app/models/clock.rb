@@ -6,8 +6,9 @@ class Clock
 
     field :time, type: Time, default: lambda{ Time.now }
 
-    def self.check
-        self.exists? ? clock = Clock.last : clock = Clock.new
+    def self.check(_id)
+        #self.exists? ? clock = Clock.last : clock = Clock.new
+        clock = self.find(_id)
         clock
     end
 end
