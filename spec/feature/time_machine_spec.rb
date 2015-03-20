@@ -10,7 +10,6 @@ describe TimeMachine::API do
 
   describe TimeMachine::API do
 
-    #let (:clock)        { Clock.create! }
     let (:current_time) { Time.now }
     let (:new_time)     { Time.now + 3600 }
 
@@ -39,7 +38,7 @@ describe TimeMachine::API do
 
     describe "PUT /api/time" do
 
-      it "allows a user to alter the time" do
+      it "allows a service to alter the time" do
         get "api/time"
         expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{current_time.iso8601}" })
 

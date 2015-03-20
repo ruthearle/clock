@@ -6,11 +6,13 @@ class Clock
 
     field :time, type: Time, default: lambda{ Time.now }
 
-    def clock_check
-        if Clock.exists?
-            clock = Clock.last
-        else
-            false
-        end
+    def self.check
+        #if self.exists?
+            #clock = Clock.last
+        #else
+            #clock = Clock.new
+        #end
+        self.exists? ? clock = Clock.last : clock = Clock.new
+        clock
     end
 end

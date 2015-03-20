@@ -1,6 +1,5 @@
 require 'grape'
 require 'grape-swagger'
-require_relative './lib/api_time'
 require_relative './models/clock'
 
 module TimeMachine
@@ -12,12 +11,8 @@ module TimeMachine
 
         desc "Returns the current time."
         get :time do
-          if Clock.exists?
-            clock = Clock.last
-          else
-            clock = Clock.new
-          end
-          { :time => clock.time.iso8601 }
+            clock = Clock.check
+            { :time => clock.time.iso8601 }
         end
 
         params do
