@@ -17,10 +17,8 @@ describe Clock do
 
     it "creates a new clock if none exists" do
       id = "default"
-      object = Clock.new
-      object.save
-      expect(Clock.check(id)).to eq object
+      object = Clock.check(id)
+      expect(object).to have_attributes(:service_id => "default")
     end
-
   end
 end

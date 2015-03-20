@@ -27,13 +27,11 @@ describe TimeMachine::API do
     describe "PUT /api/time" do
 
       it "allows a micro-service to alter the time" do
-        service_id = "QA"
-        #get "api/time", { "service_id" => service_id }
-        #expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{current_time.iso8601}" })
-
+        service_id = :QA
         put "api/time", { "new" => new_time, "service_id" => service_id }
         expect(last_response.status).to eq 200
-        expect(JSON.parse(last_response.body)).to include ({ "time" => "#{new_time.iso8601}" })
+        expect(JSON.parse(last_response.body)).to include ({ "time" => "#{new_time.iso8601}", "service_id" => "#{service_id}" })
+        #expect(JSON.parse(last_response.body)).to include ({  })
 
         get "api/time", { "service_id" => service_id}
         expect(JSON.parse(last_response.body)).to include ({ "time" => "#{new_time.iso8601}" })

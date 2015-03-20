@@ -21,17 +21,17 @@ module TimeMachine
         end
 
         params do
-          requires :new, type: Time, desc: "Updated time"
+          requires :new, type: String, desc: "Updated time"
           requires :service_id, type: String, desc: "Enter the name of the micro-service"
         end
 
         desc "Permits the time to be altered"
         put ':time' do
-            #clock = Clock.new
-            #clock.time = (params[:new])
-            #clock.save!
-            #cookies[:id] = clock.id
-            #{ :time => clock.time.iso8601  }
+          clock = Clock.check(params[:service_id])
+          clock.time = (params[:new])
+          clock.service_id = params[:service_id]
+          clock.save
+          { :time => clock.time.iso8601, :service_id => clock.service_id }
         end
 
       add_swagger_documentation
