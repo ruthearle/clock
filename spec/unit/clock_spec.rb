@@ -23,7 +23,7 @@ describe Clock do
     end
 
     it "creates a new clock if none exists" do
-        expect(Clock.check).to be_truthy
+        expect(Clock.check(id)).to be_truthy
     end
 
   end
