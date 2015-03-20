@@ -38,7 +38,7 @@ describe TimeMachine::API do
 
     describe "PUT /api/time" do
 
-      it "allows a service to alter the time" do
+      it "allows a micro-service to alter the time" do
         get "api/time"
         expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{current_time.iso8601}" })
 
