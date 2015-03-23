@@ -16,7 +16,12 @@ module TimeMachine
         end
 
         get :time do
-          clock = Clock.check(params[:service_id])
+          id = params[:service_id].downcase
+          clock = Clock.check(id)
+          if (id != "\"default\"") && (clock == nil)
+            return error! "", 404
+          end
+
           { :time => clock.time.iso8601 }
         end
 

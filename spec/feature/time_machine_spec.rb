@@ -23,7 +23,7 @@ describe TimeMachine::API do
         expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{Time.now.iso8601}" })
       end
 
-      it "returns a 404 Not Found if the service_id is not found" do
+      it "returns a 404 Not Found if the service_id is not found or mispelt" do
         allow(Time).to receive(:now).and_return(current_time)
         get "api/time", { "service_id" => "none" }
         expect(last_response.status).to eq 404
