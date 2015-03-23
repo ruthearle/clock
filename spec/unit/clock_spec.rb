@@ -5,6 +5,12 @@ describe Clock do
 
   describe "#check" do
 
+    it "returns nil if no clock found" do
+      id = "none"
+      object = Clock.check(id)
+      expect(object).to eq nil
+    end
+
     it "finds a clock by their service id" do
       object = Clock.new
       object.service_id = "rspec"
@@ -13,12 +19,6 @@ describe Clock do
       object_2.save
       id = object.service_id
       expect(Clock.check(id)).to eq object
-    end
-
-    it "creates a new clock if none exists" do
-      id = "default"
-      object = Clock.check(id)
-      expect(object).to have_attributes(:service_id => "default")
     end
   end
 end

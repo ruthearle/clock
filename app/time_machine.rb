@@ -6,23 +6,29 @@ module TimeMachine
 
     class API < Grape::API
 
+      helpers do
+        def format_string(string)
+          string.slice(0..-1).downcase
+        end
+      end
+
       format :json
       resource :api do
 
         desc "Returns the current time or the time saved by the named micro-service."
 
         params do
-            requires :service_id, type: String, desc: "ID of the service requesting the time. Use 'default' if you have not created a clock yet."
+            optional :service_id, type: String, default: "time machine", desc: "Enter the name of the service if one has been previously saved."
         end
 
         get :time do
-          id = params[:service_id].downcase
+          id = params[:service_id]
           clock = Clock.check(id)
-          if (id != "\"default\"") && (clock == nil)
-            return error! "", 404
+          if clock == nil
+            error!("No resource found!", 404)
+          else
+            { :time => clock.time.iso8601 }
           end
-
-          { :time => clock.time.iso8601 }
         end
 
         params do
@@ -33,10 +39,13 @@ module TimeMachine
         desc "Permits the time to be altered"
         put ':time' do
           clock = Clock.check(params[:service_id])
-          clock.time = (params[:new])
-          clock.service_id = (params[:service_id])
-          clock.save
-          { :time => clock.time.iso8601, :service_id => clock.service_id }
+          if clock == nil
+            clock = Clock.new
+          end
+            clock.time = (params[:new])
+            clock.service_id = (params[:service_id])
+            clock.save
+            { :time => clock.time.iso8601, :service_id => clock.service_id }
         end
 
       add_swagger_documentation
