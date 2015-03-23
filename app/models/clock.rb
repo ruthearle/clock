@@ -11,14 +11,9 @@ class Clock
     def self.check(identity)
       id = format(identity)
       clock = Clock.find_by(service_id: id)
-      #id == "default" ? Clock.new : Clock.find_by(service_id: id)
-      if id == "default"
-        clock = Clock.new
-      elsif clock == nil
-          clock = Clock.new
-      else
-        clock = Clock.find_by(service_id: id)
-      end
+
+      (id == "default") || (clock == nil) ? clock = Clock.new : clock = Clock.find_by(service_id: id)
+
       clock
     end
 
