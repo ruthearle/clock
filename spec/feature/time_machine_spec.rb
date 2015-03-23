@@ -31,7 +31,6 @@ describe TimeMachine::API do
         put "api/time", { "new" => new_time, "service_id" => service_id }
         expect(last_response.status).to eq 200
         expect(JSON.parse(last_response.body)).to include ({ "time" => "#{new_time.iso8601}", "service_id" => "#{service_id}" })
-        #expect(JSON.parse(last_response.body)).to include ({  })
 
         get "api/time", { "service_id" => service_id}
         expect(JSON.parse(last_response.body)).to include ({ "time" => "#{new_time.iso8601}" })

@@ -29,12 +29,13 @@ module TimeMachine
         put ':time' do
           clock = Clock.check(params[:service_id])
           clock.time = (params[:new])
-          clock.service_id = params[:service_id]
+          clock.service_id = (params[:service_id])
           clock.save
           { :time => clock.time.iso8601, :service_id => clock.service_id }
         end
 
-      add_swagger_documentation
+      add_swagger_documentation base_path: "/api/time",
+                                hide_documentation_path: true
 
       end
 
