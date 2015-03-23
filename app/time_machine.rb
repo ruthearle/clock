@@ -9,7 +9,7 @@ module TimeMachine
       format :json
       resource :api do
 
-        desc "Returns the current time."
+        desc "Returns the current time or the time saved by the named micro-service."
 
         params do
             requires :service_id, type: String, desc: "ID of the service requesting the time. Use 'default' if you have not created a clock yet."
@@ -34,8 +34,7 @@ module TimeMachine
           { :time => clock.time.iso8601, :service_id => clock.service_id }
         end
 
-      add_swagger_documentation base_path: "/api/time",
-                                hide_documentation_path: true
+      add_swagger_documentation
 
       end
 
