@@ -12,33 +12,36 @@ describe TimeMachine::API do
 
   describe TimeMachine::API do
 
-    let (:id)   { "development" }
-    let (:current_time) { Time.now }
-    let (:new_time)     { Time.now + 3600 }
-    let (:service)      { Clock.new }
+    let (:id)               { "development" }
+    let (:current_time)     { Time.now }
+    let (:new_time)         { Time.now + 3600 }
+    let (:service)          { Clock.new }
+    let (:status_ok)        { 200 }
+    let (:status_not_found) { 404 }
+    let (:formatted_time)   { Time.now.iso8601 }
 
     describe "GET /api/time" do
 
       it "returns the time in JSON format by default" do
-        allow(Time).to receive(:now).and_return(new_time)
+        stub_time(new_time)
         get "api/time"
         expect(last_response.status).to eq 200
         expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{Time.now.iso8601}" })
       end
 
-      it "returns a 404 Not Found if the service_id is not found or mispelt" do
-        allow(Time).to receive(:now).and_return(current_time)
-        get "api/time", { "service_id" => "none" }
-        expect(last_response.status).to eq 404
+      it "returns a 404 Not Found if the service id is not found or mispelt" do
+        service_id = "none"
+        stub_time(current_time)
+        get_request_status(service_id, status_not_found)
         expect(JSON.parse(last_response.body)).to eq ({ "error" => "No resource found!" })
       end
 
       it "returns the time set by the micro-service being queried" do
         saved_service(id)
-        allow(Time).to receive(:now).and_return(current_time)
+        stub_time(current_time)
 
-        get "api/time", { "service_id" => "development" }
-        expect(last_response.status).to eq 200
+        get_request_status(id, status_ok)
+
         expect(JSON.parse(last_response.body)).to include ({ "time" => "#{Time.now.iso8601}" })
       end
     end
@@ -46,34 +49,29 @@ describe TimeMachine::API do
     describe "PUT /api/time" do
 
       it "allows a micro-service to create a new service and alter the time" do
-        service_id = :QA
-        get "api/time", { "service_id" => service_id}
-        expect(last_response.status).to eq 404
+        service_id = "QA"
 
-        allow(Time).to receive(:now).and_return(new_time)
+        get_request_status(service_id, status_not_found)
 
-        put "api/time", { "new" => new_time, "service_id" => service_id }
-        expect(last_response.status).to eq 200
-        expect(JSON.parse(last_response.body)).to include ({ "time" => "#{Time.now.iso8601}", "service_id" => "#{service_id}" })
+        stub_time(new_time)
 
-        get "api/time", { "service_id" => service_id}
-        expect(JSON.parse(last_response.body)).to include ({ "time" => "#{Time.now.iso8601}" })
+        put_response_body(new_time, service_id, status_ok, formatted_time)
+
+        get_response_body(service_id, status_ok, formatted_time)
+
       end
 
       it "allows a micro-service to alter the time of a previously created service" do
 
-        allow(Time).to receive(:now).and_return(new_time)
+        stub_time(new_time)
 
         saved_service(id)
 
-        get "api/time", { "service_id" => id }
-        expect(last_response.status).to eq 200
+        get_request_status(id, status_ok)
 
-        put "api/time", { "new" => new_time, "service_id" => id }
-        expect(JSON.parse(last_response.body)).to include ({ "time" => "#{Time.now.iso8601}", "service_id" => id })
+        put_response_body(new_time, id, status_ok, formatted_time)
 
-        get "api/time", { "service_id" => id }
-        expect(JSON.parse(last_response.body)).to include ({ "time" => "#{Time.now.iso8601}" })
+        get_response_body(id, status_ok, formatted_time)
 
       end
     end
