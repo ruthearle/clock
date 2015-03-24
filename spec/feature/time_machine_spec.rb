@@ -15,7 +15,6 @@ describe TimeMachine::API do
     let (:id)               { "development" }
     let (:current_time)     { Time.now }
     let (:new_time)         { Time.now + 3600 }
-    let (:service)          { Clock.new }
     let (:status_ok)        { 200 }
     let (:status_not_found) { 404 }
     let (:formatted_time)   { Time.now.iso8601 }
@@ -26,7 +25,7 @@ describe TimeMachine::API do
         stub_time(new_time)
         get "api/time"
         expect(last_response.status).to eq 200
-        expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{Time.now.iso8601}" })
+        expect(JSON.parse(last_response.body)).to eq ({ "time" => "#{formatted_time}" })
       end
 
       it "returns a 404 Not Found if the service id is not found or mispelt" do
@@ -42,7 +41,7 @@ describe TimeMachine::API do
 
         get_request_status(id, status_ok)
 
-        expect(JSON.parse(last_response.body)).to include ({ "time" => "#{Time.now.iso8601}" })
+        expect(JSON.parse(last_response.body)).to include ({ "time" => "#{formatted_time}" })
       end
     end
 
@@ -73,6 +72,22 @@ describe TimeMachine::API do
 
         get_response_body(id, status_ok, formatted_time)
 
+      end
+    end
+
+    describe "DELETE /api/time" do
+      it "permits a micro service clock to be deleted" do
+        saved_service(id)
+
+        stub_time(new_time)
+
+        put_response_body(new_time, id, status_ok, formatted_time)
+
+        get_response_body(id, status_ok, formatted_time)
+
+        delete "api/time", { "service_id" => id}
+        expect(last_response.status).to eq status_ok
+        expect(JSON.parse(last_response.body)).to include ({ "success" => "#{service_id} service clock deleted!"})
       end
     end
   end

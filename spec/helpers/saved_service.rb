@@ -1,4 +1,5 @@
 def saved_service(id)
+  service = Clock.new
   service.service_id = id
   service.time = current_time
   service.save
