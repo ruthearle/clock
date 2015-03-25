@@ -1,24 +1,24 @@
 def saved_service(id)
   service = Clock.new
-  service.service_id = id
+  service.service_name = service_name
   service.time = current_time
   service.save
 end
 
 
 def get_request_status(id, status_code)
-  get "api/time", { "service_id" => id }
+    get "clocks/#{id}.json"
   expect(last_response.status).to eq status_code
 end
 
-def put_response_body(new_time, id, status_code, time_value)
-  put "api/time", { "new" => new_time, "service_id" => id }
+def post_response_body(new_time, id, status_code, time_value)
+    post "clocks/#{id}.json", { "time" => new_time }
   expect(last_response.status).to eq status_code
-  expect(JSON.parse(last_response.body)).to include ({ "time" => "#{time_value}", "service_id" => "#{id}" })
+  #expect(JSON.parse(last_response.body)).to include ({ "time" => "#{time_value}", "service_name" => "#{id}" })
 end
 
 def get_response_body(id, status_code, time_value)
-  get "api/time", { "service_id" => id}
+    get "clocks/#{id}.json"
   expect(last_response.status).to eq status_code
   expect(JSON.parse(last_response.body)).to include ({ "time" => "#{time_value}" })
 end

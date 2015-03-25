@@ -28,10 +28,10 @@
       if (url && url.length > 1) {
         url = decodeURIComponent(url[1]);
       } else {
-        url = "http://localhost:9292/api/swagger_doc/api";
+        url = "http://localhost:9292/clocks/swagger_doc/clocks";
       }
       window.swaggerUi = new SwaggerUi({
-        url: url,
+        url: url, //"/clocks/swagger_doc/clocks",
         dom_id: "swagger-ui-container",
         supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
         onComplete: function(swaggerApi, swaggerUi){
