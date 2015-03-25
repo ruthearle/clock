@@ -1,12 +1,14 @@
 require 'grape'
 require 'grape-swagger'
+require 'grape_entity'
 require_relative './models/clock'
 
 module TimeMachine
 
     class API < Grape::API
+      include Grape::Entity::DSL
       class << self
-        Grape::Route
+        #Grape::Route
         def fix_swagger_param_type()
           @combined_routes.each do |resource, routes|
             routes.each do |route|
@@ -29,6 +31,8 @@ module TimeMachine
       end
 
       resource "/clocks" do
+
+        entity :time, :service_id
 
         desc "Returns the current time or the time saved by the named micro-service."
 
@@ -58,8 +62,7 @@ module TimeMachine
           clock.service_name = (params[:service_name])
           clock.save
 
-          request.url
-          #{ :id => clock.id.to_s, :time => clock.time.utc.iso8601, :service_name => clock.service_name }
+          #{ :id => clock.id.to_s, :time => clock.time.utc.iso8601, :service_name => clock.service_name, :request_url => request.url}
         end
 
       add_swagger_documentation :hide_documentation_path => true

@@ -1,5 +1,4 @@
 ENV['RACK_ENV'] ||= 'test'
-require 'timecop'
 require 'rack/test'
 require 'mongoid'
 

@@ -7,9 +7,6 @@ map '/api/swagger' do
 end
 
 Mongoid.load!("config/mongoid.yml")
-#settings = { :prefix => "/clocks" }
-
-#run InstaSwag.for(TimeMachine::API, settings)
 
 run TimeMachine::API
 
