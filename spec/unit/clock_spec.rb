@@ -24,5 +24,6 @@ describe Clock do
       id = object.service_name
       expect(Clock.check(id)).to eq object
     end
+
   end
 end

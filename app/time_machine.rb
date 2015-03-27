@@ -35,13 +35,14 @@ module TimeMachine
     end
 
     resource "/clocks" do
+      date = "1970-01-01T00:00:00Z"
 
       # tidy this up, place it in a helper
-      if ENV['RACK_ENV'] == "test"
-        logger = Clocklog::Log4rConfig.log("test")
-      else
-        logger = Clocklog::Log4rConfig.log('clocklog')
-      end
+      #if ENV['RACK_ENV'] == "test"
+        #@logger = Clocklog::Log4rConfig.log("test")
+      #else
+        #logger = Clocklog::Log4rConfig.log
+      #end
 
       desc "Returns the current time or the time saved by the named micro-service."
 
@@ -51,11 +52,16 @@ module TimeMachine
 
       get ":service_name" do
         clock = Clock.check(params[:service_name])
+        #logger.debug "GET request"
+        #logger.debug "Clock created"
+        #logger.info  "Service: #{clock.service_name}, Time: #{clock.time.utc.iso8601}"
 
-        logger.debug "GET request"
-        logger.debug "Clock created"
-        logger.info  "Service: #{clock.service_name}, Time: #{clock.time.utc.iso8601}"
-        { :id => clock.id.to_s, :time => clock.time.utc.iso8601, :service_name => clock.service_name }
+        if (clock.fake_time == date)
+          clock.time = Time.now
+          { :id => clock.id.to_s, :time => clock.time.utc.iso8601, :service_name => clock.service_name }
+        else
+          { :id => clock.id.to_s, :fake_time => clock.fake_time.utc.iso8601, :service_name => clock.service_name }
+        end
       end
 
       desc "Permits the time to be altered"
@@ -68,17 +74,18 @@ module TimeMachine
 
       post ":service_name" do
         clock = Clock.check(params[:service_name])
-        (clock == nil) ? clock = Clock.new : clock
+        #(clock == nil) ? clock = Clock.new : clock
 
-        clock.time = (params[:time])
+        clock.fake_time = (params[:time])
         clock.service_name = (params[:service_name])
 
-        logger.debug "PUT request"
-        logger.debug "Params captured"
-        logger.debug "Time: #{params[:time]}, Service: #{params[:service_name]}"
-        logger.debug "Clock updated"
-        logger.info "Service: #{clock.service_name}, Time: #{clock.time.utc.iso8601}"
+        #logger.debug "PUT request"
+        #logger.debug "Params captured"
+        #logger.debug "Time: #{params[:time]}, Service: #{params[:service_name]}"
+        #logger.debug "Clock updated"
+        #logger.info "Service: #{clock.service_name}, Time: #{clock.time.utc.iso8601}"
 
+        p clock.inspect
         clock.save
 
       end

@@ -12,8 +12,8 @@ module Clocklog
   log_cfg = YamlConfigurator
   log_cfg.load_yaml_file('config/clocklog.yml')
 
-  def self.log(name)
-    Logger[name]
+  def self.log
+    Logger['clocklog']
   end
 
  end

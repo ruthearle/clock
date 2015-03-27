@@ -19,6 +19,7 @@ describe TimeMachine::API do
     let (:status_created)   { 201 }
     let (:status_not_found) { 404 }
     let (:formatted_time)   { Time.now.utc.iso8601 }
+    let (:date)             { "1970-01-01T00:00:00Z" }
 
     describe "GET /clocks" do
 
@@ -33,14 +34,12 @@ describe TimeMachine::API do
         stub_time(current_time)
         get "/clocks/test.json"
         expect(last_response.status).to eq status_ok
-        expect(JSON.parse(last_response.body)).to include ({ "time" => "#{formatted_time}", "service_name" => "test"})
+        expect(JSON.parse(last_response.body)).to include ({ "time" => "#{formatted_time}", "service_name" => "test" })
 
-        stub_time(new_time)
         get "clocks/test.json"
         expect(last_response.status).to eq status_ok
         expect(JSON.parse(last_response.body)).to include ({ "time" => "#{formatted_time}", "service_name" => "test"})
       end
-
 
       it "returns the time set by the micro-service being queried" do
         saved_service(service_name)
@@ -48,7 +47,7 @@ describe TimeMachine::API do
 
         get_request_status(service_name, status_ok)
 
-        expect(JSON.parse(last_response.body)).to include ({ "time" => "#{formatted_time}" })
+        expect(JSON.parse(last_response.body)).to include ({ "fake_time" => "#{formatted_time}" })
       end
     end
 
@@ -57,14 +56,12 @@ describe TimeMachine::API do
       it "allows a micro-service to create a new service and alter the time" do
         service_name = "QA"
 
-        #get_request_status(service_name, status_not_found)
-
         stub_time(new_time)
 
-        post_response_body(new_time, service_name, status_created, formatted_time)
+
+        post_response_body(new_time, service_name, status_created)
 
         get_response_body(service_name, status_ok, formatted_time)
-
       end
 
       it "allows a micro-service to alter the time of a previously created service" do
@@ -75,7 +72,7 @@ describe TimeMachine::API do
 
         get_request_status(service_name, status_ok)
 
-        post_response_body(new_time, service_name, status_created, formatted_time)
+        post_response_body(new_time, service_name, status_created)
 
         get_response_body(service_name, status_ok, formatted_time)
 
