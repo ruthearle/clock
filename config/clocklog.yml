@@ -18,12 +18,20 @@ log4r_config:
         - rolling
         - logfile
 
+  loggers:
+    - name      : test
+      level     : DEBUG
+      additive  : "false"
+      trace     : "false"
+      outputters:
+        - logfile
+
   outputters:
     - type : StdoutOutputter
       name : console
       level: DEBUG
       formatter:
-        date_pattern: "%y%m%d %H:%M:%S"
+        date_pattern: "%d-%m-%y %H:%M:%S"
         pattern     : "%d %l %m"
         type        : PatternFormatter
 
@@ -33,9 +41,9 @@ log4r_config:
       level   : INFO
       filename: 'logs/rolling.log'
       maxsize : 16000
-      trunc   : true
+      trunc   : false
       formatter:
-        date_pattern: "%y%m%d %H:%M:%S"
+        date_pattern: "%y-%m-%d %H:%M:%S"
         pattern     : "%d %l %m"
         type        : PatternFormatter
 
@@ -45,6 +53,6 @@ log4r_config:
       filename: 'date.log'
       dirname : 'logs'
       formatter:
-        date_pattern: "%y%m%d %H:%M:%S"
-        pattern     : "%d %l %m"
+        date_pattern: "%y-%m-%d  %H:%M:%S"
+        pattern     : "%d %C %l %m"
         type        : PatternFormatter

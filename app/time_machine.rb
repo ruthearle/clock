@@ -36,8 +36,12 @@ module TimeMachine
 
     resource "/clocks" do
 
-      logger = Clocklog::Log4rConfig.log
-
+      # tidy this up, place it in a helper
+      if ENV['RACK_ENV'] == "test"
+        logger = Clocklog::Log4rConfig.log("test")
+      else
+        logger = Clocklog::Log4rConfig.log('clocklog')
+      end
 
       desc "Returns the current time or the time saved by the named micro-service."
 

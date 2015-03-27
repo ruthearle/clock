@@ -22,19 +22,25 @@ describe TimeMachine::API do
 
     describe "GET /clocks" do
 
-        it "returns the time in JSON format for a new service id" do
+      it "returns the time in JSON format for a new service id" do
         stub_time(new_time)
         get "/clocks/#{service_name}.json"
         expect(last_response.status).to eq status_ok
         expect(JSON.parse(last_response.body)).to include ({ "time" => "#{formatted_time}", "service_name" => "development" })
       end
 
-      #it "returns a 404 Not Found if the service id is not found or mispelt" do
-        #service_name = "none"
-        #stub_time(current_time)
-        #get_request_status(service_name, status_not_found)
-        #expect(JSON.parse(last_response.body)).to eq ({ "error" => "No resource found!" })
-      #end
+      it "returns the current time if the named micro-service has not been saved" do
+        stub_time(current_time)
+        get "/clocks/test.json"
+        expect(last_response.status).to eq status_ok
+        expect(JSON.parse(last_response.body)).to include ({ "time" => "#{formatted_time}", "service_name" => "test"})
+
+        stub_time(new_time)
+        get "clocks/test.json"
+        expect(last_response.status).to eq status_ok
+        expect(JSON.parse(last_response.body)).to include ({ "time" => "#{formatted_time}", "service_name" => "test"})
+      end
+
 
       it "returns the time set by the micro-service being queried" do
         saved_service(service_name)
