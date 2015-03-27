@@ -1,0 +1,50 @@
+purpose     : Configure Clock Logging
+description : Global settings for Log4r
+
+---
+# **  YAML2LOG4R **
+log4r_config:
+  pre_config:
+    root:
+      level: DEBUG
+
+  loggers:
+    - name      : clocklog
+      level     : DEBUG
+      additive  : "false"
+      trace     : "false"
+      outputters:
+        - console
+        - rolling
+        - logfile
+
+  outputters:
+    - type : StdoutOutputter
+      name : console
+      level: DEBUG
+      formatter:
+        date_pattern: "%y%m%d %H:%M:%S"
+        pattern     : "%d %l %m"
+        type        : PatternFormatter
+
+
+    - type    : RollingFileOutputter
+      name    : rolling
+      level   : INFO
+      filename: 'logs/rolling.log'
+      maxsize : 16000
+      trunc   : true
+      formatter:
+        date_pattern: "%y%m%d %H:%M:%S"
+        pattern     : "%d %l %m"
+        type        : PatternFormatter
+
+    - type    : DateFileOutputter
+      name    : logfile
+      level   : DEBUG
+      filename: 'date.log'
+      dirname : 'logs'
+      formatter:
+        date_pattern: "%y%m%d %H:%M:%S"
+        pattern     : "%d %l %m"
+        type        : PatternFormatter
