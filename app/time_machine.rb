@@ -39,7 +39,7 @@ module TimeMachine
 
       # tidy this up, place it in a helper
       #if ENV['RACK_ENV'] == "test"
-        #@logger = Clocklog::Log4rConfig.log("test")
+        #logger = Clocklog::Log4rConfig.log
       #else
         #logger = Clocklog::Log4rConfig.log
       #end
@@ -74,7 +74,6 @@ module TimeMachine
 
       post ":service_name" do
         clock = Clock.check(params[:service_name])
-        #(clock == nil) ? clock = Clock.new : clock
 
         clock.fake_time = (params[:time])
         clock.service_name = (params[:service_name])
