@@ -18,7 +18,7 @@ describe Clock do
     it "creates a new clock with the named service provided" do
       object = Clock.new
       object.service_name = "ruth"
-      object.time = Time.now
+      object.real_time = Time.now
       object.fake_time = "nil"
       object.save
       id = object.service_name

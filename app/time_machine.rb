@@ -9,14 +9,26 @@ module TimeMachine
 
   class API < Grape::API
 
+
     include Clocklog
 
-    helper do
-      def logger
-        Log4r.log
+
+      #if ENV['RACK_ENV'] == "test"
+        #logger Log4rConfig.log('test')
+      #else
+        #logger Log4rConfig.log('clocklog')
+      #end
+    @logging = Log4rConfig.clocklog
+
+    p @logging.inspect
+    helpers do
+
+      def logging
+        @logging
       end
     end
 
+    p @logging.inspect
     class << self
       #Grape::Route
       def fix_swagger_param_type()
@@ -43,13 +55,6 @@ module TimeMachine
     resource "/clocks" do
       date = "1970-01-01T00:00:00Z"
 
-      # tidy this up, place it in a helper
-      #if ENV['RACK_ENV'] == "test"
-        #logger = Clocklog::Log4rConfig.log
-      #else
-        #logger = Clocklog::Log4rConfig.log
-      #end
-
       desc "Returns the current time or the time saved by the named micro-service."
 
       params do
@@ -58,13 +63,13 @@ module TimeMachine
 
       get ":service_name" do
         clock = Clock.check(params[:service_name])
-        logger.debug "GET request"
+        #logger.debug "GET request"
         #logger.debug "Clock created"
-        #logger.info  "Service: #{clock.service_name}, Time: #{clock.time.utc.iso8601}"
+        #logger.info  "Service: #{clock.service_name}, Time: #{clock.real_time.utc.iso8601}"
 
         if (clock.fake_time == date)
-          clock.time = Time.now
-          { :id => clock.id.to_s, :time => clock.time.utc.iso8601, :service_name => clock.service_name }
+          clock.real_time = Time.now
+          { :id => clock.id.to_s, :real_time => clock.real_time.utc.iso8601, :service_name => clock.service_name }
         else
           { :id => clock.id.to_s, :fake_time => clock.fake_time.utc.iso8601, :service_name => clock.service_name }
         end
@@ -88,9 +93,8 @@ module TimeMachine
         #logger.debug "Params captured"
         #logger.debug "Time: #{params[:time]}, Service: #{params[:service_name]}"
         #logger.debug "Clock updated"
-        #logger.info "Service: #{clock.service_name}, Time: #{clock.time.utc.iso8601}"
+        #logger.info "Service: #{clock.service_name}, Time: #{clock.real_time.utc.iso8601}"
 
-        p clock.inspect
         clock.save
 
       end

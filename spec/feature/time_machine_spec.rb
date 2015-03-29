@@ -1,10 +1,11 @@
 require 'spec_helper'
 require './app/time_machine'
 require './app/models/clock'
-require_relative '../helpers/saved_service'
+require_relative '../helpers/request_helpers'
 
 describe TimeMachine::API do
   include Rack::Test::Methods
+  include RequestHelpers
 
   def app
     TimeMachine::API
@@ -27,18 +28,18 @@ describe TimeMachine::API do
         stub_time(new_time)
         get "/clocks/#{service_name}.json"
         expect(last_response.status).to eq status_ok
-        expect(JSON.parse(last_response.body)).to include ({ "time" => "#{formatted_time}", "service_name" => "development" })
+        expect(JSON.parse(last_response.body)).to include ({ "real_time" => "#{formatted_time}", "service_name" => "development" })
       end
 
       it "returns the current time if the named micro-service has not been saved" do
         stub_time(current_time)
         get "/clocks/test.json"
         expect(last_response.status).to eq status_ok
-        expect(JSON.parse(last_response.body)).to include ({ "time" => "#{formatted_time}", "service_name" => "test" })
+        expect(JSON.parse(last_response.body)).to include ({ "real_time" => "#{formatted_time}", "service_name" => "test" })
 
         get "clocks/test.json"
         expect(last_response.status).to eq status_ok
-        expect(JSON.parse(last_response.body)).to include ({ "time" => "#{formatted_time}", "service_name" => "test"})
+        expect(JSON.parse(last_response.body)).to include ({ "real_time" => "#{formatted_time}", "service_name" => "test"})
       end
 
       it "returns the time set by the micro-service being queried" do
