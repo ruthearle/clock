@@ -1,8 +1,8 @@
 require 'grape'
 require 'grape-swagger'
 require 'grape_entity'
-require_relative './lib/clocklog'
 
+require_relative './lib/clocklog'
 require_relative './models/clock'
 
 module TimeMachine
@@ -18,17 +18,16 @@ module TimeMachine
       #else
         #logger Log4rConfig.log('clocklog')
       #end
-    @logging = Log4rConfig.clocklog
+    #logger Log4rConfig.new.clocklog
 
-    p @logging.inspect
-    helpers do
+    #p logger.inspect
+    #helpers do
 
-      def logging
-        @logging
-      end
-    end
+      #def log
+        #Clocklog::Log4rConfig.clocklog
+      #end
+    #end
 
-    p @logging.inspect
     class << self
       #Grape::Route
       def fix_swagger_param_type()
@@ -52,8 +51,9 @@ module TimeMachine
       end
     end
 
+    #@logger = Clocklog::Log4rConfig.clocklog
+
     resource "/clocks" do
-      date = "1970-01-01T00:00:00Z"
 
       desc "Returns the current time or the time saved by the named micro-service."
 
@@ -62,7 +62,10 @@ module TimeMachine
       end
 
       get ":service_name" do
+        date = "1970-01-01T00:00:00Z"
+
         clock = Clock.check(params[:service_name])
+        #p @logger.inspect
         #logger.debug "GET request"
         #logger.debug "Clock created"
         #logger.info  "Service: #{clock.service_name}, Time: #{clock.real_time.utc.iso8601}"
