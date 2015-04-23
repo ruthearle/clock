@@ -12,22 +12,6 @@ module TimeMachine
 
     include Clocklog
 
-
-      #if ENV['RACK_ENV'] == "test"
-        #logger Log4rConfig.log('test')
-      #else
-        #logger Log4rConfig.log('clocklog')
-      #end
-    #logger Log4rConfig.new.clocklog
-
-    #p logger.inspect
-    #helpers do
-
-      #def log
-        #Clocklog::Log4rConfig.clocklog
-      #end
-    #end
-
     class << self
       #Grape::Route
       def fix_swagger_param_type()
@@ -51,8 +35,6 @@ module TimeMachine
       end
     end
 
-    #@logger = Clocklog::Log4rConfig.clocklog
-
     resource "/clocks" do
 
       desc "Returns the current time or the time saved by the named micro-service."
@@ -65,10 +47,6 @@ module TimeMachine
         date = "1970-01-01T00:00:00Z"
 
         clock = Clock.check(params[:service_name])
-        #p @logger.inspect
-        #logger.debug "GET request"
-        #logger.debug "Clock created"
-        #logger.info  "Service: #{clock.service_name}, Time: #{clock.real_time.utc.iso8601}"
 
         if (clock.fake_time == date)
           clock.real_time = Time.now
@@ -91,12 +69,6 @@ module TimeMachine
 
         clock.fake_time = (params[:time])
         clock.service_name = (params[:service_name])
-
-        #logger.debug "PUT request"
-        #logger.debug "Params captured"
-        #logger.debug "Time: #{params[:time]}, Service: #{params[:service_name]}"
-        #logger.debug "Clock updated"
-        #logger.info "Service: #{clock.service_name}, Time: #{clock.real_time.utc.iso8601}"
 
         clock.save
 

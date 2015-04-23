@@ -10,13 +10,9 @@ module Clocklog
 
   include Log4r
 
-  cfg = YamlConfigurator
+  log_config = YamlConfigurator
 
-  cfg.load_yaml_file('config/clocklog.yml')
-
-  p cfg.inspect
-
-  p Log4r::Logger.name
+  log_config.load_yaml_file('config/clocklog.yml')
 
   def self.clocklog
     Logger['clocklog']
