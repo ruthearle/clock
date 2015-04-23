@@ -2,16 +2,14 @@ Simple Clock API Using Grape
 ===============
 
 
-* Grape version
-Grape 0.11.0
 
 ## System dependencies
-  - Grape
-  - Grape-entity
-  - Grape-swagger
-  - Log4r
-  - MongoDB
-  - Mongoid
+  - Grape v0.11.0
+  - Grape-entity v0.4.5
+  - Grape-swagger v0.10.1
+  - Log4r v1.1.10
+  - MongoDB v.4.0.2
+  - Mongoid v4.0.2
 
 
 ##To Run the App Locally
