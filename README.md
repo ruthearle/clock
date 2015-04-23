@@ -1,14 +1,18 @@
 Simple Clock API Using Grape
 ===============
 
+This is a simple API with two end points. The GET with return a named clock with the current time. The PUT will return the previously or newly named clock with the time that has been input.
 
+The aim of this project was to use GrapeAPI with persistence and to integrate Swagger Docs for easier navigation and understanding of the API. 
+
+The final part of the project was to implement logging.
 
 ## System dependencies
   - Grape v0.11.0
   - Grape-entity v0.4.5
   - Grape-swagger v0.10.1
   - Log4r v1.1.10
-  - MongoDB v.4.0.2
+  - MongoDB v1.3.1
   - Mongoid v4.0.2
 
 
@@ -36,4 +40,9 @@ Clock is fully tested with Rspec/Rack Test.
 #####From the commandline:
 
 1. Navigate to the directory (see step 2. above) and type: <tt>rspec</tt>
+
+
+##Improvements?
+
+I would fully implement the logging functionality using TDD because the current implementation was not done his way.
 
